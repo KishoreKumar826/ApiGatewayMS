@@ -1,0 +1,31 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: studentms-route
+          uri: lb://STUDENTMS
+          predicates:
+            - Path=/studentms/**
+          filters:
+            - RewritePath=/studentms/(?<segment>.*), /$\{segment}
+
+        - id: studentfeesms-route
+          uri: lb://STUDENTFEESMS
+          predicates:
+            - Path=/studentfeesms/**
+          filters:
+            - RewritePath=/studentfeesms/(?<segment>.*), /$\{segment}
+  application:
+     name: APIGateway
+
+server:
+  port: 8088
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8086/eureka
+  instance:
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 5
